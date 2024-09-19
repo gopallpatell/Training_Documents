@@ -190,3 +190,29 @@ chmod 600 /home/devopsadmin/.ssh/*
 chown -R devopsadmin /opt/tomcat
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+pipeline {
+    agent { label 'slave1' }
+
+
+    stages {
+        stage('scm_checkout') {
+            steps {
+                echo 'Hello World'
+              git 'https://github.com/gopallpatell/java-mvn-springbootapp.git'
+            }
+        }
+        stage('Application build') {
+            steps {
+                echo 'perform app build'
+                sh '''mvn clean package'''
+    }
+}
+        stage('deploy to tomcat server'){
+            steps{
+            script{
+             sshPublisher(publishers: [sshPublisherDesc(configName: 'tomcat-server', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/opt/tomcat/webapps', remoteDirectorySDF: false, removePrefix: 'target/', sourceFiles: 'target/*.war')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+            }
+        }
+}
+}
+}
