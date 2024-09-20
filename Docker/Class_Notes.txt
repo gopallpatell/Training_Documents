@@ -331,7 +331,8 @@ Day 33: 16th Sep. 2024
 			- Application Developers create the Dockerfile and update in the Source Code Repository. 
 			
 		
-		vi Dockerfile 
+		vi Dockerfile    #create this as a root user
+                                  #create one folder and within that create a docker file
 		
 		FROM ubuntu 
 		RUN apt update -y 
@@ -345,6 +346,9 @@ Day 33: 16th Sep. 2024
 			Eg.:
 			
 			docker build -t loksaieta/sa-javamvnimg .		# '.' refers to the Dockerfile path
+
+
+                    after creating the image u can use this to create docker containers
 			
 		Write Dockerfile :::
 		
@@ -366,12 +370,20 @@ Day 33: 16th Sep. 2024
 			
 			
 			
-			Dockerfile :::
+			Dockerfile :::     # this is the real docker file we need to create in pipeline's directory
+                                        # /workspace/<pipeline folder where we create .war file>/
 			
 			FROM tomcat:8.0
-			COPY ./target/*.war /usr/local/tomcat/webapps
+			COPY ./target/*.war /usr/local/tomcat/webapps    # to copy artifacts from target folder to tomcat container webapps folder
 			EXPOSE 8080		
-			
+
+                we cant access docker as devopsadmin user for that we need to add devopsadmin to the group to access docker as a root user 
+
+                      cat /etc/group
+
+               usermod -aG docker devopsadmin         #we give group level access to devopsadmin to use docker
+
+                          
 			docker build -t loksaieta/sa-webappimg:v1.0 .			# run this command from the Dockerfile location.
 			docker run -it -p 8089:8080 loksaieta/sa-webappimg:v1.0
 			
