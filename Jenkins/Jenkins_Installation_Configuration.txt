@@ -183,11 +183,12 @@ ls ~/.ssh
 
 cat id_ecdsa.pub > authorized_keys
 
-chmod 600 /home/devopsadmin/.ssh/*
+chmod 600 /home/devopsadmin/.ssh/*    # as a devopsadmin user
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #make devopsadmin user as a owner to tomcat dir :
 
-chown -R devopsadmin /opt/tomcat
+chown -R devopsadmin /opt/tomcat     # as a root user
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 pipeline {
