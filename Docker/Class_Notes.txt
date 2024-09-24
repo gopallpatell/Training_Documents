@@ -756,14 +756,14 @@ pipeline {
      agent { label 'slave1' }
 
 	environment {	
-		DOCKERHUB_CREDENTIALS=credentials('dockerloginid')
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred')
 	}
 		
     stages {
         stage('SCM_Checkout') {
             steps {
                 echo 'Perform SCM Checkout'
-                git 'https://github.com/SA-AWS-DevOps-July24/java-mvn-springbootapp.git'
+                git 'https://github.com/gopallpatell/java-mvn-springbootapp.git'
             }
         }
         stage('Application Build') {
@@ -775,7 +775,7 @@ pipeline {
         stage('Docker Build') {
             steps {
                 echo 'Perform Docker Build'
-				sh "docker build -t loksaieta/sa-wd-webapp:${BUILD_NUMBER} ."
+				sh "docker build -t gopallpatell/netflix:${BUILD_NUMBER} ."
 				sh 'docker image list'
             }
         }
@@ -789,7 +789,7 @@ pipeline {
         stage('Publish the Image to Dockerhub') {
             steps {
                 echo 'Publish to DockerHub'
-				sh "docker push loksaieta/sa-wd-webapp:${BUILD_NUMBER}"                
+				sh "docker push gopallpatell/netflix:${BUILD_NUMBER}"                
             }
         }
     }
