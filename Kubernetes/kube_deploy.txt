@@ -7,24 +7,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deploy
+  name: netflix-deploy
   labels:
-    app: nginx-deploy
+    app: netflix-deploy
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        app: nginx-app
+        app: netflix-app
     spec:
       containers:
-      - name: nginx-container
-        image: nginx:stable-otel
+      - name: netflix-container
+        image: gopallpatell/netflix:22
         ports:
-        - containerPort: 80
+        - containerPort: 8080
   selector:
     matchLabels:
-      app: nginx-app
+      app: netflix-app
 
 *******************************************************************
 # 2. Create and Display Deployment
