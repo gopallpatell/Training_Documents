@@ -31,7 +31,7 @@ spec:
 
 kubectl create -f nginx-deploy.yaml 
 kubectl get deploy -l app=nginx-deploy
-kubectl get rs -l app=nginx-deploy
+kubectl get rs -l app=nginx-app
 kubectl get po -l app=nginx-app
 kubectl describe deploy nginx-deploy
 
