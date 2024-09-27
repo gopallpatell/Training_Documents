@@ -248,7 +248,7 @@ Day 37: 23rd Sep. 2024
 			4. Disable swap configuration in all the nodes
 			5. Install Docker in all the nodes
 			6. Install CRI - 'Container-D' in all the nodes
-			7. Install Kubeadm,kubelet,kubectl 
+			7. Install Kubeadm,kubelet,kubectl              #Kubeadm is a tool provided by Kubernetes to simplify the process of setting up a production-ready
 			8. Enable Kubelet	
 		   
 		Only on Master Node:
