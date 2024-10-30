@@ -1,0 +1,238 @@
+provider "aws" {
+  region     = "ap-south-1"
+  access_key = "AKIA3FLD4TTVLD4V5MXF"
+  secret_key = "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"
+}
+
+
+variable "server_names" {
+  default = ["Master-of-Master", "Jenkins-SAlave-Node", "Test-Server", "Monitering-Server"]
+}
+
+# Create VPC
+
+resource "aws_vpc" "myvpc9" {
+  cidr_block       = "10.0.0.0/16"
+  instance_tenancy = "default"
+
+  tags = {
+    Name = "myvpc9"
+  }
+}
+
+# Create Subnet 
+
+resource "aws_subnet" "mysubnet9" {
+  vpc_id     = aws_vpc.myvpc9.id
+  availability_zone = "ap-south-1a"
+  cidr_block = "10.0.1.0/24"
+
+  tags = {
+    Name = "mysubnet9"
+  }
+}
+
+# Internet Gateway
+
+resource "aws_internet_gateway" "mygw9" {
+  vpc_id = aws_vpc.myvpc9.id
+
+  tags = {
+    Name = "mygw9"
+  }
+}
+
+# Route Table
+
+resource "aws_route_table" "myrt9" {
+  vpc_id = aws_vpc.myvpc9.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.mygw9.id
+  }
+
+  tags = {
+    Name = "myrt9"
+  }
+}
+
+# Route Table Association
+
+resource "aws_route_table_association" "myrta9" {
+  subnet_id      = aws_subnet.mysubnet9.id
+  route_table_id = aws_route_table.myrt9.id
+}
+
+# Security Groups
+
+resource "aws_security_group" "mysg9" {
+  name        = "mysg9"
+  description = "Allow All traffic"
+  vpc_id      = aws_vpc.myvpc9.id
+
+   ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"        # -1 means all protocols
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  
+
+  tags = {
+    Name = "mysg9"
+  }
+}
+
+# Create Instance
+
+resource "aws_instance" "servers"{
+  for_each      =   toset(var.server_names) 
+  ami           = "ami-09b0a86a2c84101e1"
+  instance_type = "t2.medium"
+  associate_public_ip_address = true
+  subnet_id = aws_subnet.mysubnet9.id
+  vpc_security_group_ids = [aws_security_group.mysg9.id]
+  key_name = "gp"
+  
+  tags = {
+    Name = each.key
+  }
+}
+
+################################################## MOM ##########################################################3
+
+
+su
+
+vi master-server.sh 
+
+  #!/bin/bash
+  echo "installing java"
+  apt update -y
+  apt install git -y
+  apt install openjdk-17-jdk -y
+  apt install maven -y
+
+  echo "installing docker"
+  apt install docker.io -y
+
+  echo "installing ansible"
+  sudo apt update
+  sudo apt install software-properties-common
+  sudo add-apt-repository --yes --update ppa:ansible/ansible
+  sudo apt install ansible -y
+
+  echo "installing jenkins"
+  sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+  
+  
+ sh master-server.sh
+  
+##add docker to jenkins group
+
+sudo usermod -aG docker jenkins
+
+sudo systemctl restart jenkins
+
+reboot instance
+  
+
+access jenkins thru browser 
+
+
+
+
+########################################### slave node ##################################################
+
+#Configure Slave Node1 for Java Maven App. :
+
+
+sudo -i
+
+apt update -y 
+
+Install Java ::
+
+sudo apt update -y 
+sudo apt install openjdk-17-jre -y
+java -version						
+
+Install GIT :
+
+sudo apt install git -y
+
+Install Maven - Build Tool :
+
+sudo apt install maven -y 
+
+Create User in Jenkins Slave Machine & Create SSH Keys 
+
+SSH Keys --> is composed of public and private keys 
+
+#Add User : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+
+su - devopsadmin
+
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+
+#cat id_rsa.pub > authorized_keys
+
+cat id_ecdsa.pub > authorized_keys
+
+chmod 600 /home/devopsadmin/.ssh/*
+
+	
+
+Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
+
+	Goto to Manage Jenkins 
+		Select Nodes 
+			On Nodes Dashboard, Click on New Node
+				Give Node Name, and choose permanent agent.
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
