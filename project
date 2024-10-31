@@ -202,6 +202,7 @@ sudo systemctl restart jenkins
 
 reboot instance
 
+ usermod -aG docker ansibleadmin
 
 
 
