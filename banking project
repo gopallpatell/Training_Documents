@@ -222,9 +222,64 @@ Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
 	Goto to Manage Jenkins 
 		Select Nodes 
 			On Nodes Dashboard, Click on New Node
-				Give Node Name, and choose permanent agent.
+				Give Node Name, and choose permanent ag
 
 
+
+
+
+###############################################################################################################################
+
+pipeline {
+     agent any
+
+	environment {	
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred')
+	}
+		
+    stages {
+        stage('SCM_Checkout') {
+            steps {
+                echo 'Perform SCM Checkout'
+                git 'https://github.com/gopallpatell/star-agile-banking-finance.git'
+            }
+        }
+        stage('Application Build') {
+            steps {
+                echo 'Perform Application Build'
+                sh 'mvn clean package'
+            }
+        }
+        stage('Docker Build') {
+            steps {
+                echo 'Perform Docker Build'
+				sh "docker build -t gopallpatell/banking:v1.0 ."
+				sh 'docker image list'
+            }
+        }
+        stage('Login to Dockerhub') {
+            steps {
+                echo 'Login to DockerHub'				
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                
+            }
+        }
+        stage('Publish the Image to Dockerhub') {
+            steps {
+                echo 'Publish to DockerHub'
+				sh "docker push gopallpatell/banking:v1.0"                
+            }
+        }
+         stage('deploy') {
+            steps {
+         ansiblePlaybook become: true, becomeUser: 'ansibleadmin', credentialsId: 'slave1', disableHostKeyChecking: true, installation: 'ansible', inventory: '/etc/ansible/hosts' , playbook: 'ansible-playbook.yml', sudoUser: null, vaultTmpPath: ''
+            }
+         }
+         
+        
+    }
+}
+1 - create 
 
   
 
