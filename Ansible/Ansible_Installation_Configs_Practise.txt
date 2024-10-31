@@ -87,6 +87,8 @@ ls ~/.ssh
 #id_ecdsa - private key
 #id_ecdsa.pub - public
 
+cat id_ecdsa.pub > authorized_keys
+
 
 #Goto Node1&2, within ansibleadmin home directory, create .ssh directory
 
