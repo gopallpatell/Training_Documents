@@ -151,10 +151,19 @@ sudo apt-get install jenkins -y
   
  sh master-server.sh
   
-##add docker to jenkins group
+#####add Jenkins (user) to the sudo group
 
-sudo usermod -aG docker jenkins
+sudo usermod -aG sudo jenkins
 
+sudo systemctl restart jenkins
+
+#####add docker to jenkins group
+
+sudo usermod -aG  docker jenkins 
+
+sudo systemctl restart jenkins
+
+reboot instance
 sudo systemctl restart jenkins
 
 reboot instance
@@ -214,6 +223,30 @@ ls ~/.ssh
 cat id_ecdsa.pub > authorized_keys
 
 chmod 600 /home/devopsadmin/.ssh/*
+
+
+
+install docker 
+
+apt install docker.io -y
+
+
+#####add Jenkins (user) to the sudo group
+
+sudo usermod -aG sudo jenkins
+
+sudo systemctl restart jenkins
+
+#####add docker to jenkins group
+
+sudo usermod -aG docker jenkins 
+
+sudo systemctl restart jenkins
+
+reboot instance
+
+usermod -aG docker devopsadmin
+
 
 	
 
