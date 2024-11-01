@@ -306,6 +306,8 @@ su - ansibleadmin
 
 ls -a 
 
+create .ssh directory
+
 
 vi authorized_keys
 
@@ -321,7 +323,61 @@ install docker
 apt install docker.io -y
 
 
-usermod -aG docker devopsadmin
+usermod -aG docker ansibleadmin
+
+
+
+# Use the private IP addr. of AN1 and AN2
+
+ssh ansibleadmin@172.31.34.144
+ssh ansibleadmin@172.31.45.232
+
+chown -R devopsadmin:devopsadmin /etc/ansible    as a root user
+
+
+###update vi etc/ansible/hosts
+
+
+[testnodes]
+samplenode1 ansible_ssh_host=172.31.34.144 ansible_ssh_user=ansibleadmin
+samplenode2 ansible_ssh_host=172.31.45.232 ansible_ssh_user=ansibleadmin
+
+
+ansible testnodes -m ping      as devopsadmin user
+
+
+
+
+
+go to tools and enable ansible tool 
+
+then add master node in ssh publish
+
+snippet generator (invoke ansible playbook)
+
+
+
+############ on test server ###########
+
+
+
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+cat id_ecdsa.pub > authorized_keys
+
+
+
+
+
+
+
 
 
 
@@ -382,7 +438,29 @@ pipeline {
 
 
 
+MasterServerIp = '172.31.41.49'
+         sshUser = '172.31.32.128'
+         def playbookPath = '//home/devopsadmin/workspace/project-1/ansible-playbook.yml'
 
+
+
+
+
+
+  stage('Copy Playbook to slave Server master') {
+            steps {
+                script {
+                    // Assuming your playbook is named 'deploy_app.yml'
+
+                    
+
+                    // Use scp to copy the playbook to the master server
+                   sh """
+                   scp -o StrictHostKeyChecking=no ${playbookPath} ${sshUser}@${masterServerIp}:/home/devopsadmin/workspace/project-1/
+                                                           """
+                }
+            }
+        }
 
 
 
