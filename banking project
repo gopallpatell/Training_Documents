@@ -267,12 +267,8 @@ ls ~/.ssh
 
 cat id_ecdsa.pub > authorized_keys
 
-
-vi authorized_keys
-
-#paste the id_ecdsa.pub of devopsadmin user from controller machine to authorized_keys file in Ansible Node1 
-
 chmod 600 /home/ansibleadmin/.ssh/*
+
 
 ################## on test server ##################
 
