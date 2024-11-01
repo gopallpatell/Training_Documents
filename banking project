@@ -164,10 +164,7 @@ sudo usermod -aG  docker jenkins
 sudo systemctl restart jenkins
 
 reboot instance
-sudo systemctl restart jenkins
 
-reboot instance
-  
 
 access jenkins thru browser 
 
@@ -231,20 +228,6 @@ install docker
 apt install docker.io -y
 
 
-#####add Jenkins (user) to the sudo group
-
-sudo usermod -aG sudo jenkins
-
-sudo systemctl restart jenkins
-
-#####add docker to jenkins group
-
-sudo usermod -aG docker jenkins 
-
-sudo systemctl restart jenkins
-
-reboot instance
-
 usermod -aG docker devopsadmin
 
 
@@ -258,6 +241,91 @@ Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
 				Give Node Name, and choose permanent ag
 
 
+
+
+################## on ansible controller ##############
+
+#Add User in Ansible Controller : 
+
+useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+
+#useradd devopsadmin
+
+su - devopsadmin	
+
+#ssh-keygen -t rsa -b 1024 -m PEM
+
+#ssh-keygen -R rsa -b 1024 -m PEM
+ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
+
+ls ~/.ssh 
+
+#You should see following two files:
+
+#id_ecdsa - private key
+#id_ecdsa.pub - public
+
+cat id_ecdsa.pub > authorized_keys
+
+
+vi authorized_keys
+
+#paste the id_ecdsa.pub of devopsadmin user from controller machine to authorized_keys file in Ansible Node1 
+
+chmod 600 /home/ansibleadmin/.ssh/*
+
+################## on test server ##################
+
+#Add User in Ansible Nodes : 
+
+sudo -i
+
+apt update -y 
+
+useradd ansibleadmin -s /bin/bash -m -d /home/ansibleadmin 
+
+passwd ansibleadmin
+
+#Enter New Password:
+#Confirm Password:
+
+#Goto:
+
+vi /etc/ssh/sshd_config
+
+#Enable Password Authentication to Yes and save the file
+#Execute Below command to update the changes.
+
+service ssh reload
+
+#As a root user edit below file:
+
+$ visudo
+
+#add the below mentioned line in the file and save it.
+ 
+ansibleadmin ALL=(ALL) NOPASSWD: ALL
+
+su - ansibleadmin
+
+ls -a 
+
+
+vi authorized_keys
+
+#paste the id_ecdsa.pub of devopsadmin user from controller machine to authorized_keys file in Ansible Node1 
+
+chmod 600 /home/ansibleadmin/.ssh/*
+
+
+############### on test server ####################
+
+install docker 
+
+apt install docker.io -y
+
+
+usermod -aG docker devopsadmin
 
 
 
