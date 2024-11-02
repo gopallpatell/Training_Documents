@@ -200,9 +200,9 @@ SSH Keys --> is composed of public and private keys
 
 #Add User : 
 
-useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+useradd jenkinsadmin -s /bin/bash -m -d /home/jenkinsadmin
 
-su - devopsadmin
+su - jenkinsadmin
 
 ssh-keygen -t ecdsa -b 521										#ubuntu 22.04 or higher version of ubuntu				
 
@@ -219,7 +219,7 @@ ls ~/.ssh
 
 cat id_ecdsa.pub > authorized_keys
 
-chmod 600 /home/devopsadmin/.ssh/*
+chmod 600 /home/jenkinsadmin/.ssh/*
 
 
 
@@ -228,7 +228,7 @@ install docker
 apt install docker.io -y
 
 
-usermod -aG docker devopsadmin
+usermod -aG docker jenkinsadmin
 
 
 	
@@ -247,11 +247,11 @@ Login to Jenkins - Manage Jenkins - Attach the Slave Node to jenkins Master
 
 #Add User in Ansible Controller : 
 
-useradd devopsadmin -s /bin/bash -m -d /home/devopsadmin
+useradd ansibleadmin -s /bin/bash -m -d /home/ansibleadmin
 
 #useradd devopsadmin
 
-su - devopsadmin	
+su - ansibleadmin	
 
 #ssh-keygen -t rsa -b 1024 -m PEM
 
@@ -278,9 +278,9 @@ sudo -i
 
 apt update -y 
 
-useradd ansibleadmin -s /bin/bash -m -d /home/ansibleadmin 
+useradd testadmin -s /bin/bash -m -d /home/testadmin 
 
-passwd ansibleadmin
+passwd testadmin
 
 #Enter New Password:
 #Confirm Password:
@@ -302,7 +302,7 @@ $ visudo
  
 ansibleadmin ALL=(ALL) NOPASSWD: ALL
 
-su - ansibleadmin
+su - testadmin
 
 ls -a 
 
@@ -313,7 +313,7 @@ vi authorized_keys
 
 #paste the id_ecdsa.pub of devopsadmin user from controller machine to authorized_keys file in Ansible Node1 
 
-chmod 600 /home/ansibleadmin/.ssh/*
+chmod 600 /home/testadmin/.ssh/*
 
 
 ############### on test server ####################
@@ -323,16 +323,16 @@ install docker
 apt install docker.io -y
 
 
-usermod -aG docker ansibleadmin
+usermod -aG docker testadmin
 
 
 
 # Use the private IP addr. of AN1 and AN2
 
-ssh ansibleadmin@172.31.34.144
-ssh ansibleadmin@172.31.45.232
+ssh testadmin@172.31.34.144
+ssh testadmin@172.31.45.232
 
-chown -R devopsadmin:devopsadmin /etc/ansible    as a root user
+chown -R ansibleadmin:ansibleadmin /etc/ansible    as a root user
 
 
 ###update vi etc/ansible/hosts
@@ -343,7 +343,7 @@ samplenode1 ansible_ssh_host=172.31.34.144 ansible_ssh_user=ansibleadmin
 samplenode2 ansible_ssh_host=172.31.45.232 ansible_ssh_user=ansibleadmin
 
 
-ansible testnodes -m ping      as devopsadmin user
+ansible testnodes -m ping      as ansibleadmin user
 
 
 
