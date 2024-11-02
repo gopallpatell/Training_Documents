@@ -300,7 +300,7 @@ $ visudo
 
 #add the below mentioned line in the file and save it.
  
-ansibleadmin ALL=(ALL) NOPASSWD: ALL
+testadmin ALL=(ALL) NOPASSWD: ALL
 
 su - testadmin
 
