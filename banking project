@@ -370,8 +370,8 @@ ls ~/.ssh
 #id_ecdsa - private key
 #id_ecdsa.pub - public
 
-cat id_ecdsa.pub > authorized_keys
-
+vi  authorized_keys
+paste the public key of the test server to the authorized key
 
 
 
