@@ -16,7 +16,7 @@ Day 31: 12th Sep. 2024
 	
 	Virtual Machines :
 	
-		- VMs are hardware level Virtualization 
+		- VMs are application level Virtualization 
 		- VMs are created using Hypervisor 
 		- VMs are used to run the Operating Systems
 		- VMs will continue to execute even if there is no task or active applications
