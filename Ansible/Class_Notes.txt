@@ -3,6 +3,10 @@
 Day 41: 30th Sep. 2024
 #######################
 
+ it is a fixed period in which team will do the predefined task 
+
+it is like it will contineusly collect the feedback from the stack holder team memember custemors product owners 
+
 	Configuration Management System using Ansible ::::
 	
 	Terrafrom :
