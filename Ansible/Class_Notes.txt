@@ -7,6 +7,10 @@ Day 41: 30th Sep. 2024
 
 it is like it will contineusly collect the feedback from the stack holder team memember custemors product owners 
 
+arg it is used to to define build time variable means it will be available during build process
+
+env it is used to define the env variable that will be available at runtime 
+
 	Configuration Management System using Ansible ::::
 	
 	Terrafrom :
